@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     // 📊 LAPORAN
     // =========================
     Route::get('/laporan', [TransaksiController::class, 'laporan']);
+    Route::get('/laporan/laba-bersih', [LaporanController::class, 'labaBersih']);
 
     // 🔥 LABA RUGI (FINAL)
     Route::get('/laba-rugi', [LaporanController::class, 'labaRugi']);

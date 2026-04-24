@@ -44,8 +44,8 @@
 
             <!-- 🔥 TAMBAHKAN DI SINI -->
             <li class="mb-2">
-                <a href="/laba-bersih"
-                class="block p-2 rounded {{ request()->is('laba-bersih') ? 'bg-blue-600' : 'hover:bg-blue-600' }}">
+                <a href="/laporan/laba-bersih"
+                class="block p-2 rounded {{ request()->is('laporan/laba-bersih') ? 'bg-blue-600' : 'hover:bg-blue-600' }}">
                     Laba Bersih
                 </a>
             </li>
