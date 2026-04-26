@@ -1,245 +1,217 @@
 @extends('layout.app')
 
 @section('content')
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-<style>
-.select2-container {
-    width: 100% !important;
-}
-.select2-selection {
-    height: 42px !important;
-}
-</style>
-
-<h2 class="text-2xl font-bold mb-4">Transaksi</h2>
-
-<form action="/transaksi" method="POST">
-@csrf
-
-<table class="w-full border table-fixed" id="table-transaksi">
-    <thead class="bg-gray-200">
-        <tr>
-            <th class="p-2 w-[300px]">Barang</th>
-            <th class="p-2 w-[150px] text-center">Harga</th>
-            <th class="p-2 w-[150px] text-center">Jumlah</th>
-            <th class="p-2 w-[150px] text-center">Subtotal</th>
-            <th class="p-2 w-[100px] text-center">Aksi</th>
-        </tr>
-    </thead>
-
-    <tbody>
-    <tr class="row-item">
-        <td class="p-2">
-            <select name="barang_id[]" class="barang select2 w-full">
-                <option value="">Pilih Barang</option>
-                @foreach ($barangs as $barang)
-                    <option value="{{ $barang->id }}" data-harga="{{ $barang->harga_jual }}">
-                        {{ $barang->nama_barang }}
-                    </option>
-                @endforeach
-            </select>
-        </td>
-
-        <td class="p-2 text-center harga">0</td>
-
-        <td class="p-2">
-            <input type="number" name="jumlah[]" class="jumlah border p-2 w-full" value="1">
-        </td>
-
-        <td class="p-2 text-center subtotal">0</td>
-
-        <td class="p-2 text-center">
-            <button type="button" class="hapus bg-red-500 text-white px-2 rounded">X</button>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<button type="button" id="tambah"
-    class="bg-green-600 text-white px-4 py-2 mt-3 rounded">
-    + Tambah Baris
-</button>
-
-<h3 class="text-xl font-bold mt-4">
-    Total: Rp <span id="total">0</span>
-</h3>
-
-<!-- PEMBAYARAN -->
-<div class="mt-4 space-y-2">
-
+<div class="page-header">
     <div>
-        <label>Metode Pembayaran</label>
-        <select name="metode_pembayaran" id="metode" class="border p-2 w-full rounded">
-            <option value="cash">Cash</option>
-            <option value="transfer">Transfer</option>
-            <option value="qris">QRIS</option>
-        </select>
+        <p class="page-kicker">Kasir</p>
+        <h1 class="page-title">Transaksi Baru</h1>
+        <p class="page-subtitle">Cari barang, atur jumlah, dan hitung pembayaran dalam tampilan kasir yang lebih bersih.</p>
     </div>
-
-    <div>
-        <label>Uang Bayar</label>
-        <input type="number" name="bayar" id="bayar"
-               class="border p-2 w-full rounded">
-    </div>
-
-    <div class="font-bold">
-        Kembalian: Rp <span id="kembalian">0</span>
-    </div>
-
 </div>
 
-<button type="submit"
-    class="bg-blue-600 text-white px-4 py-2 mt-3 rounded">
-    Simpan Transaksi
-</button>
+@if(session('error'))
+    <div class="alert alert-error">{{ session('error') }}</div>
+@endif
 
+<form action="/transaksi" method="POST" class="content-card">
+    @csrf
+
+    <div class="table-wrap">
+        <table class="data-table" id="table-transaksi">
+            <thead>
+                <tr>
+                    <th style="width: 34%;">Barang</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Subtotal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row-item">
+                    <td>
+                        <select name="barang_id[]" class="barang select2 form-select">
+                            <option value="">Pilih Barang</option>
+                            @foreach ($barangs as $barang)
+                                <option value="{{ $barang->id }}" data-harga="{{ $barang->harga_jual }}">
+                                    {{ $barang->nama_barang }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="harga money">0</td>
+                    <td>
+                        <input type="number" name="jumlah[]" class="jumlah form-input" value="1" min="1">
+                    </td>
+                    <td class="subtotal money">0</td>
+                    <td>
+                        <button type="button" class="hapus btn btn-danger">Hapus</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="toolbar" style="margin-top: 16px;">
+        <button type="button" id="tambah" class="btn btn-secondary">Tambah Baris</button>
+    </div>
+
+    <div class="metric-grid">
+        <div class="metric-card">
+            <p class="metric-label">Total Belanja</p>
+            <p class="metric-value">Rp <span id="total">0</span></p>
+        </div>
+        <div class="metric-card">
+            <p class="metric-label">Uang Bayar</p>
+            <p class="metric-value">Rp <span id="preview-bayar">0</span></p>
+        </div>
+        <div class="metric-card">
+            <p class="metric-label">Kembalian</p>
+            <p class="metric-value">Rp <span id="kembalian">0</span></p>
+        </div>
+    </div>
+
+    <div class="form-card" style="max-width: none; box-shadow: none; background: rgba(255,255,255,0.64);">
+        <div class="field-grid">
+            <div class="field">
+                <label for="metode">Metode Pembayaran</label>
+                <select name="metode_pembayaran" id="metode" class="form-select">
+                    <option value="cash">Cash</option>
+                    <option value="transfer">Transfer</option>
+                    <option value="qris">QRIS</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="bayar">Uang Bayar</label>
+                <input type="number" name="bayar" id="bayar" class="form-input" min="1">
+            </div>
+        </div>
+    </div>
+
+    <div class="toolbar" style="margin-top: 18px; margin-bottom: 0;">
+        <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
+    </div>
 </form>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+@push('scripts')
 <script>
 $(document).ready(function () {
-
-    function initSelect2() {
-        $('.select2').select2({
-            placeholder: "Cari barang...",
+    function initSelect2(scope) {
+        $(scope).find('.select2').select2({
+            placeholder: 'Cari barang...',
             width: '100%'
         });
     }
 
-    initSelect2();
+    function formatNumber(value) {
+        return new Intl.NumberFormat('id-ID').format(value || 0);
+    }
 
-    // =========================
-    // 🔥 HITUNG TOTAL REALTIME
-    // =========================
+    function parseNumber(value) {
+        return parseInt(value, 10) || 0;
+    }
+
     function hitungTotal() {
         let total = 0;
 
-        $(".row-item").each(function () {
-            let harga = parseInt($(this).find('.harga').text()) || 0;
-            let jumlah = parseInt($(this).find('.jumlah').val()) || 0;
+        $('.row-item').each(function () {
+            const harga = parseNumber($(this).find('.harga').data('value'));
+            const jumlah = parseNumber($(this).find('.jumlah').val());
+            const subtotal = harga * jumlah;
 
-            let subtotal = harga * jumlah;
-
-            $(this).find('.subtotal').text(subtotal);
-
+            $(this).find('.subtotal').data('value', subtotal).text(formatNumber(subtotal));
             total += subtotal;
         });
 
-        $("#total").text(total);
+        $('#total').data('value', total).text(formatNumber(total));
 
-        // 🔥 AUTO QRIS
-        if ($("#metode").val() === 'qris') {
-            $("#bayar").val(total);
-            $("#kembalian").text(0);
+        if ($('#metode').val() === 'qris') {
+            $('#bayar').val(total);
         }
+
+        hitungKembalian();
     }
 
-    // =========================
-    // 🔥 PILIH BARANG
-    // =========================
+    function hitungKembalian() {
+        const bayar = parseNumber($('#bayar').val());
+        const total = parseNumber($('#total').data('value'));
+        const kembalian = bayar - total;
+
+        $('#preview-bayar').text(formatNumber(bayar));
+        $('#kembalian').text(formatNumber(kembalian > 0 ? kembalian : 0));
+    }
+
+    initSelect2(document);
+
     $(document).on('change', '.barang', function () {
+        const harga = parseNumber($(this).find(':selected').data('harga'));
+        const row = $(this).closest('tr');
+        const selectedId = $(this).val();
 
-        let harga = $(this).find(':selected').data('harga') || 0;
-        let row = $(this).closest('tr');
+        row.find('.harga').data('value', harga).text(formatNumber(harga));
 
-        row.find('.harga').text(harga);
-
-        hitungTotal();
-
-        // 🔥 CEK DUPLIKAT
-        let selectedId = $(this).val();
-        let currentRow = row;
-
-        $(".barang").not(this).each(function () {
-
-            if ($(this).val() == selectedId && selectedId != '') {
-
-                let existingRow = $(this).closest('tr');
-
-                let existingQty = parseInt(existingRow.find('.jumlah').val()) || 0;
-                let newQty = parseInt(currentRow.find('.jumlah').val()) || 1;
+        $('.barang').not(this).each(function () {
+            if ($(this).val() === selectedId && selectedId !== '') {
+                const existingRow = $(this).closest('tr');
+                const existingQty = parseNumber(existingRow.find('.jumlah').val());
+                const newQty = parseNumber(row.find('.jumlah').val()) || 1;
 
                 existingRow.find('.jumlah').val(existingQty + newQty).trigger('input');
+                row.remove();
 
-                currentRow.remove();
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Barang sudah ada',
+                    text: 'Jumlah barang ditambahkan ke baris sebelumnya.',
+                    confirmButtonColor: '#6aa9df'
+                });
 
-                alert('Barang sudah ada, jumlah ditambahkan!');
                 return false;
             }
         });
 
-    });
-
-    // =========================
-    // 🔥 INPUT JUMLAH
-    // =========================
-    $(document).on('input', '.jumlah', function () {
         hitungTotal();
     });
 
-    // =========================
-    // 🔥 TAMBAH BARIS
-    // =========================
-    $("#tambah").click(function () {
+    $(document).on('input', '.jumlah', hitungTotal);
+    $('#bayar').on('input', hitungKembalian);
 
-        let row = $(".row-item:first").clone();
+    $('#metode').on('change', function () {
+        const total = parseNumber($('#total').data('value'));
 
-        row.find("select").val('').removeClass('select2-hidden-accessible').next('.select2').remove();
-        row.find("input").val(1);
-        row.find(".harga, .subtotal").text(0);
+        if ($(this).val() === 'qris') {
+            $('#bayar').val(total).prop('readonly', true);
+        } else {
+            $('#bayar').val('').prop('readonly', false);
+        }
 
-        $("#table-transaksi tbody").append(row);
-
-        row.find('.select2').select2({
-            placeholder: "Cari barang...",
-            width: '100%'
-        });
-
+        hitungKembalian();
     });
 
-    // =========================
-    // 🔥 HAPUS BARIS
-    // =========================
+    $('#tambah').click(function () {
+        const row = $('.row-item:first').clone();
+
+        row.find('.select2-container').remove();
+        row.find('select')
+            .removeClass('select2-hidden-accessible')
+            .removeAttr('data-select2-id aria-hidden tabindex')
+            .val('');
+        row.find('option').removeAttr('data-select2-id');
+        row.find('input').val(1);
+        row.find('.harga, .subtotal').data('value', 0).text('0');
+
+        $('#table-transaksi tbody').append(row);
+        initSelect2(row);
+    });
+
     $(document).on('click', '.hapus', function () {
-        if ($("#table-transaksi tbody tr").length > 1) {
+        if ($('#table-transaksi tbody tr').length > 1) {
             $(this).closest('tr').remove();
             hitungTotal();
         }
     });
-
-    // =========================
-    // 🔥 QRIS AUTO BAYAR
-    // =========================
-    $("#metode").on('change', function () {
-
-        let total = parseInt($("#total").text()) || 0;
-
-        if ($(this).val() === 'qris') {
-            $("#bayar").val(total).prop('readonly', true);
-            $("#kembalian").text(0);
-        } else {
-            $("#bayar").val('').prop('readonly', false);
-        }
-    });
-
-    // =========================
-    // 🔥 KEMBALIAN
-    // =========================
-    $("#bayar").on('input', function () {
-
-        let bayar = parseInt($(this).val()) || 0;
-        let total = parseInt($("#total").text()) || 0;
-
-        let kembalian = bayar - total;
-
-        $("#kembalian").text(kembalian > 0 ? kembalian : 0);
-    });
-
 });
 </script>
-
+@endpush
 @endsection

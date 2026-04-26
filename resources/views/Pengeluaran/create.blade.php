@@ -1,27 +1,51 @@
 @extends('layout.app')
 
 @section('content')
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Keuangan</p>
+        <h1 class="page-title">Tambah Pengeluaran</h1>
+        <p class="page-subtitle">Simpan biaya harian dengan kategori yang konsisten untuk memudahkan rekap.</p>
+    </div>
+    <a href="/pengeluaran" class="btn btn-soft">Kembali</a>
+</div>
 
-<h2 class="text-xl font-bold mb-4">Tambah Pengeluaran</h2>
+@if ($errors->any())
+    <div class="alert alert-error">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
+@endif
 
-<form method="POST" action="/pengeluaran">
-@csrf
+<form method="POST" action="/pengeluaran" class="form-card">
+    @csrf
 
-<input type="date" name="tanggal" class="border p-2 w-full mb-2">
+    <div class="field-grid">
+        <div class="field">
+            <label for="tanggal">Tanggal</label>
+            <input id="tanggal" type="date" name="tanggal" value="{{ old('tanggal') }}" class="form-input">
+        </div>
 
-<input type="text" name="kategori" placeholder="Kategori"
-       class="border p-2 w-full mb-2">
+        <div class="field">
+            <label for="kategori">Kategori</label>
+            <input id="kategori" type="text" name="kategori" value="{{ old('kategori') }}" class="form-input">
+        </div>
 
-<input type="text" name="keterangan" placeholder="Keterangan"
-       class="border p-2 w-full mb-2">
+        <div class="field field-full">
+            <label for="keterangan">Keterangan</label>
+            <input id="keterangan" type="text" name="keterangan" value="{{ old('keterangan') }}" class="form-input">
+        </div>
 
-<input type="number" name="jumlah" placeholder="Jumlah"
-       class="border p-2 w-full mb-2">
+        <div class="field">
+            <label for="jumlah">Jumlah</label>
+            <input id="jumlah" type="number" name="jumlah" value="{{ old('jumlah') }}" class="form-input" min="1">
+        </div>
+    </div>
 
-<button class="bg-blue-600 text-white px-4 py-2 rounded">
-    Simpan
-</button>
-
+    <div class="toolbar" style="margin-top: 22px; margin-bottom: 0;">
+        <button class="btn btn-primary">Simpan Pengeluaran</button>
+        <a href="/pengeluaran" class="btn btn-soft">Batal</a>
+    </div>
 </form>
-
 @endsection

@@ -1,70 +1,74 @@
 @extends('layout.app')
 
 @section('content')
-
-<h2 class="text-2xl font-bold mb-4">Tambah Pemasukan Lomba</h2>
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Pemasukan</p>
+        <h1 class="page-title">Tambah Pemasukan Lomba</h1>
+        <p class="page-subtitle">Total pemasukan dihitung otomatis dari jumlah peserta dan harga tiket.</p>
+    </div>
+    <a href="/pemasukan" class="btn btn-soft">Kembali</a>
+</div>
 
 @if($errors->any())
-<div class="bg-red-200 p-3 mb-3 rounded">
-    <ul>
+    <div class="alert alert-error">
         @foreach($errors->all() as $error)
-            <li>- {{ $error }}</li>
+            <div>{{ $error }}</div>
         @endforeach
-    </ul>
-</div>
+    </div>
 @endif
 
-<form action="/pemasukan" method="POST" class="space-y-4">
-@csrf
+<form action="/pemasukan" method="POST" class="form-card">
+    @csrf
 
-<div>
-    <label class="block mb-1">Tanggal</label>
-    <input type="date" name="tanggal"
-           class="border p-2 w-full rounded">
-</div>
+    <div class="field-grid">
+        <div class="field">
+            <label for="tanggal">Tanggal</label>
+            <input id="tanggal" type="date" name="tanggal" value="{{ old('tanggal') }}" class="form-input">
+        </div>
 
-<div>
-    <label class="block mb-1">Nama Sesi</label>
-    <select name="nama_lomba" class="border p-2 w-full rounded">
-        <option value="Sesi Pagi">Sesi Pagi</option>
-        <option value="Sesi Malam">Sesi Malam</option>
-    </select>
-</div>
+        <div class="field">
+            <label for="nama_lomba">Nama Sesi</label>
+            <select id="nama_lomba" name="nama_lomba" class="form-select">
+                <option value="Sesi Pagi" {{ old('nama_lomba') === 'Sesi Pagi' ? 'selected' : '' }}>Sesi Pagi</option>
+                <option value="Sesi Malam" {{ old('nama_lomba') === 'Sesi Malam' ? 'selected' : '' }}>Sesi Malam</option>
+            </select>
+        </div>
 
-<div>
-    <label class="block mb-1">Jumlah Peserta</label>
-    <input type="number" name="jumlah_peserta"
-           class="border p-2 w-full rounded"
-           id="peserta">
-</div>
+        <div class="field">
+            <label for="peserta">Jumlah Peserta</label>
+            <input id="peserta" type="number" name="jumlah_peserta" value="{{ old('jumlah_peserta') }}" class="form-input" min="1">
+        </div>
 
-<div>
-    <label class="block mb-1">Harga Tiket</label>
-    <input type="number" name="harga_tiket"
-           class="border p-2 w-full rounded"
-           id="tiket">
-</div>
+        <div class="field">
+            <label for="tiket">Harga Tiket</label>
+            <input id="tiket" type="number" name="harga_tiket" value="{{ old('harga_tiket') }}" class="form-input" min="0">
+        </div>
+    </div>
 
-<div class="font-bold text-lg">
-    Total: Rp <span id="total">0</span>
-</div>
+    <div class="metric-card" style="margin-top: 18px;">
+        <p class="metric-label">Estimasi Total</p>
+        <p class="metric-value">Rp <span id="total">0</span></p>
+    </div>
 
-<button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-    Simpan
-</button>
-
-<a href="/pemasukan" class="ml-3 text-gray-600">Kembali</a>
-
+    <div class="toolbar" style="margin-top: 22px; margin-bottom: 0;">
+        <button class="btn btn-primary">Simpan Pemasukan</button>
+        <a href="/pemasukan" class="btn btn-soft">Batal</a>
+    </div>
 </form>
 
-{{-- 🔥 AUTO HITUNG TOTAL --}}
+@push('scripts')
 <script>
-document.addEventListener('input', function() {
-    let peserta = parseInt(document.getElementById('peserta').value) || 0;
-    let tiket = parseInt(document.getElementById('tiket').value) || 0;
+    function formatNumber(value) {
+        return new Intl.NumberFormat('id-ID').format(value || 0);
+    }
 
-    document.getElementById('total').innerText = peserta * tiket;
-});
+    document.addEventListener('input', function () {
+        const peserta = parseInt(document.getElementById('peserta').value, 10) || 0;
+        const tiket = parseInt(document.getElementById('tiket').value, 10) || 0;
+
+        document.getElementById('total').innerText = formatNumber(peserta * tiket);
+    });
 </script>
-
+@endpush
 @endsection

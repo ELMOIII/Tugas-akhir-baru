@@ -1,39 +1,46 @@
 @extends('layout.app')
 
 @section('content')
-
-<h2 class="text-2xl font-bold mb-4">Laporan Laba Rugi</h2>
-
-<form method="GET" class="flex gap-2 mb-4">
-    <input type="date" name="tanggal_awal" class="border p-2 rounded">
-    <input type="date" name="tanggal_akhir" class="border p-2 rounded">
-
-    <button class="bg-blue-600 text-white px-4 py-2 rounded">
-        Filter
-    </button>
-</form>
-
-<div class="bg-white p-6 rounded shadow w-full max-w-lg">
-
-    <div class="flex justify-between mb-2">
-        <span>Total Pendapatan</span>
-        <span>Rp {{ number_format($totalPendapatan) }}</span>
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Laporan</p>
+        <h1 class="page-title">Laporan Laba Rugi</h1>
+        <p class="page-subtitle">Ringkasan pendapatan dan pengeluaran dalam model pastel yang sama dengan halaman laporan lain.</p>
     </div>
-
-    <div class="flex justify-between mb-2">
-        <span>Total Pengeluaran</span>
-        <span>Rp {{ number_format($totalPengeluaran) }}</span>
-    </div>
-
-    <hr class="my-3">
-
-    <div class="flex justify-between font-bold text-lg">
-        <span>Laba / Rugi</span>
-        <span class="{{ $laba >= 0 ? 'text-green-600' : 'text-red-600' }}">
-            Rp {{ number_format($laba) }}
-        </span>
-    </div>
-
 </div>
 
+<div class="content-card">
+    <form method="GET" class="filter-bar">
+        <div class="field">
+            <label for="tanggal_awal">Tanggal Awal</label>
+            <input id="tanggal_awal" type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}" class="form-input">
+        </div>
+
+        <div class="field">
+            <label for="tanggal_akhir">Tanggal Akhir</label>
+            <input id="tanggal_akhir" type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}" class="form-input">
+        </div>
+
+        <button class="btn btn-primary">Filter</button>
+    </form>
+
+    <div class="metric-grid" style="margin-bottom: 0;">
+        <div class="metric-card">
+            <p class="metric-label">Total Pendapatan</p>
+            <p class="metric-value">Rp {{ number_format($totalPendapatan ?? 0) }}</p>
+        </div>
+
+        <div class="metric-card">
+            <p class="metric-label">Total Pengeluaran</p>
+            <p class="metric-value">Rp {{ number_format($totalPengeluaran ?? 0) }}</p>
+        </div>
+
+        <div class="metric-card">
+            <p class="metric-label">Laba / Rugi</p>
+            <p class="metric-value {{ ($laba ?? 0) >= 0 ? 'positive' : 'negative' }}">
+                Rp {{ number_format($laba ?? 0) }}
+            </p>
+        </div>
+    </div>
+</div>
 @endsection

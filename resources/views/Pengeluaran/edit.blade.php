@@ -1,25 +1,52 @@
 @extends('layout.app')
 
 @section('content')
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Keuangan</p>
+        <h1 class="page-title">Edit Pengeluaran</h1>
+        <p class="page-subtitle">Perbarui catatan biaya operasional agar laporan tetap sinkron.</p>
+    </div>
+    <a href="/pengeluaran" class="btn btn-soft">Kembali</a>
+</div>
 
-<h2 class="text-xl font-bold mb-4">Edit Pengeluaran</h2>
+@if ($errors->any())
+    <div class="alert alert-error">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
+@endif
 
-<form method="POST" action="/pengeluaran/{{ $pengeluaran->id }}">
-@csrf
-@method('PUT')
+<form method="POST" action="/pengeluaran/{{ $pengeluaran->id }}" class="form-card">
+    @csrf
+    @method('PUT')
 
-<input type="date" name="tanggal" value="{{ $pengeluaran->tanggal }}" class="border p-2 w-full mb-2">
+    <div class="field-grid">
+        <div class="field">
+            <label for="tanggal">Tanggal</label>
+            <input id="tanggal" type="date" name="tanggal" value="{{ old('tanggal', $pengeluaran->tanggal) }}" class="form-input">
+        </div>
 
-<input type="text" name="kategori" value="{{ $pengeluaran->kategori }}" class="border p-2 w-full mb-2">
+        <div class="field">
+            <label for="kategori">Kategori</label>
+            <input id="kategori" type="text" name="kategori" value="{{ old('kategori', $pengeluaran->kategori) }}" class="form-input">
+        </div>
 
-<input type="text" name="keterangan" value="{{ $pengeluaran->keterangan }}" class="border p-2 w-full mb-2">
+        <div class="field field-full">
+            <label for="keterangan">Keterangan</label>
+            <input id="keterangan" type="text" name="keterangan" value="{{ old('keterangan', $pengeluaran->keterangan) }}" class="form-input">
+        </div>
 
-<input type="number" name="jumlah" value="{{ $pengeluaran->jumlah }}" class="border p-2 w-full mb-2">
+        <div class="field">
+            <label for="jumlah">Jumlah</label>
+            <input id="jumlah" type="number" name="jumlah" value="{{ old('jumlah', $pengeluaran->jumlah) }}" class="form-input" min="1">
+        </div>
+    </div>
 
-<button class="bg-blue-600 text-white px-4 py-2 rounded">
-    Update
-</button>
-
+    <div class="toolbar" style="margin-top: 22px; margin-bottom: 0;">
+        <button class="btn btn-primary">Update Pengeluaran</button>
+        <a href="/pengeluaran" class="btn btn-soft">Batal</a>
+    </div>
 </form>
-
 @endsection
