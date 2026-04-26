@@ -72,6 +72,8 @@
 
 <div class="mt-4 text-right font-bold text-lg">
     Total Pendapatan: Rp {{ number_format($total) }}
+    <div class="mt-2 text-right font-bold text-green-600 text-lg">
+    Total Keuntungan: Rp {{ number_format($totalKeuntungan) }}
 </div>
 
 @endsection

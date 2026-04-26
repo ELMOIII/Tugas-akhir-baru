@@ -9,15 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-    {
-        Schema::create('kategoris', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_kategori');
-            $table->timestamps();
-        });
-    }
-    
+public function up(): void
+{
+    Schema::create('kategoris', function (Blueprint $table) {
+        $table->id(); // Ini akan menjadi primary key (bigint unsigned)
+        $table->string('nama_kategori');
+        $table->timestamps();
+    });
+}
+
     /**
      * Reverse the migrations.
      */

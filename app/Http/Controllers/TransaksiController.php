@@ -22,22 +22,39 @@ class TransaksiController extends Controller
         return view('transaksi.struk', compact('transaksi'));
     }
 
-    public function laporan(Request $request)
-    {
-        $query = Transaksi::query();
+public function laporan(Request $request)
+{
+    $query = Transaksi::query();
 
+    // 🔍 FILTER TANGGAL
+    if ($request->tanggal_awal && $request->tanggal_akhir) {
+        $query->whereBetween('tanggal', [
+            $request->tanggal_awal,
+            $request->tanggal_akhir
+        ]);
+    }
+
+    $transaksis = $query->latest()->get();
+
+    // 💰 TOTAL PENJUALAN
+    $total = $transaksis->sum('total');
+
+    // 🔥 TOTAL KEUNTUNGAN (INI YANG PENTING)
+    $totalKeuntungan = DetailTransaksi::whereHas('transaksi', function ($q) use ($request) {
         if ($request->tanggal_awal && $request->tanggal_akhir) {
-            $query->whereBetween('tanggal', [
+            $q->whereBetween('tanggal', [
                 $request->tanggal_awal,
                 $request->tanggal_akhir
             ]);
         }
+    })->sum('keuntungan');
 
-        $transaksis = $query->latest()->get();
-        $total = $transaksis->sum('total');
-
-        return view('transaksi.laporan', compact('transaksis', 'total'));
-    }
+    return view('transaksi.laporan', compact(
+        'transaksis',
+        'total',
+        'totalKeuntungan'
+    ));
+}
 
     public function store(Request $request)
     {
