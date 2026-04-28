@@ -36,10 +36,11 @@ public function laporan(Request $request)
 
     $transaksis = $query->latest()->get();
 
-    // 💰 TOTAL PENJUALAN
+    // 💰 1. TOTAL PENDAPATAN (OMSET)
     $total = $transaksis->sum('total');
 
-    // 🔥 TOTAL KEUNTUNGAN (INI YANG PENTING)
+    // 📈 2. TOTAL KEUNTUNGAN / LABA BERSIH PENJUALAN
+    // Menghitung total kolom 'keuntungan' dari detail transaksi yang terfilter
     $totalKeuntungan = DetailTransaksi::whereHas('transaksi', function ($q) use ($request) {
         if ($request->tanggal_awal && $request->tanggal_akhir) {
             $q->whereBetween('tanggal', [

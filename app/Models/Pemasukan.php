@@ -13,4 +13,16 @@ class Pemasukan extends Model
     'harga_tiket',
     'total'
 ];
+
+// 🔥 Fungsi untuk menghitung keuntungan per tiket (20%)
+    public function getLabaPerTiketAttribute()
+    {
+        return $this->harga_tiket * 0.2;
+    }
+
+    // 🔥 Fungsi untuk menghitung total keuntungan bersih per baris
+    public function getTotalLabaAttribute()
+    {
+        return $this->total * 0.2;
+    }
 }

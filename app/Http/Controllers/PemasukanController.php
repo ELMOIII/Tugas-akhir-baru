@@ -11,10 +11,23 @@ class PemasukanController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $data = Pemasukan::latest()->get();
-        return view('pemasukan.index', compact('data'));
-    }
+{
+    $data = Pemasukan::all();
+
+    // 💰 Hitung Ringkasan
+    $totalPendapatan = $data->sum('total');
+    $totalPeserta = $data->sum('jumlah_peserta');
+    
+    // 🔥 Hitung Total Laba (20% dari total pendapatan)
+    $totalLaba = $totalPendapatan * 0.2;
+
+    return view('pemasukan.index', compact(
+        'data', 
+        'totalPendapatan', 
+        'totalPeserta', 
+        'totalLaba'
+    ));
+}   
 
     /**
      * Show the form for creating a new resource.

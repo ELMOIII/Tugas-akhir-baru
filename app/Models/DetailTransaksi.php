@@ -13,7 +13,7 @@ class DetailTransaksi extends Model
         'barang_id',
         'jumlah',
         'subtotal',
-        'laba' // 🔥 WAJIB
+        'keuntungan'
     ];
 
     // 🔥 relasi ke transaksi
@@ -25,6 +25,6 @@ class DetailTransaksi extends Model
     // 🔥 relasi ke barang
     public function barang()
     {
-        return $this->belongsTo(\App\Models\Barang::class);
+        return $this->belongsTo(Barang::class);
     }
 }

@@ -524,15 +524,16 @@
                 <li>
                     <a href="/laporan" class="nav-link {{ request()->is('laporan') ? 'is-active' : '' }}">
                         <span class="nav-icon">L</span>
-                        <span>Laporan</span>
+                        <span>Pemasukan Warung</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/laporan/laba-bersih" class="nav-link {{ request()->is('laporan/laba-bersih') ? 'is-active' : '' }}">
-                        <span class="nav-icon">R</span>
-                        <span>Laba Bersih</span>
+                    <a href="/pemasukan" class="nav-link {{ request()->is('pemasukan*') ? 'is-active' : '' }}">
+                        <span class="nav-icon">M</span>
+                        <span>Pemasukan Lomba</span>
                     </a>
                 </li>
+                
                 <li>
                     <a href="/pengeluaran" class="nav-link {{ request()->is('pengeluaran*') ? 'is-active' : '' }}">
                         <span class="nav-icon">P</span>
@@ -540,15 +541,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/grafik" class="nav-link {{ request()->is('grafik') ? 'is-active' : '' }}">
-                        <span class="nav-icon">G</span>
-                        <span>Grafik</span>
+                    <a href="/laporan/laba-bersih" class="nav-link {{ request()->is('laporan/laba-bersih') ? 'is-active' : '' }}">
+                        <span class="nav-icon">R</span>
+                        <span>Laba Rugi</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/pemasukan" class="nav-link {{ request()->is('pemasukan*') ? 'is-active' : '' }}">
-                        <span class="nav-icon">M</span>
-                        <span>Pemasukan Lomba</span>
+                    <a href="/grafik" class="nav-link {{ request()->is('grafik') ? 'is-active' : '' }}">
+                        <span class="nav-icon">G</span>
+                        <span>Grafik</span>
                     </a>
                 </li>
             </ul>

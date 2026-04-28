@@ -167,7 +167,7 @@ class BarangSeeder extends Seeder
                 'nama_barang' => 'Goodday Cappuccino Dingin',
                 'kategori_id' => $minuman->id,
                 'harga_beli' => 3000,
-                'harga_jual' => 12000,
+                'harga_jual' => 10000,
                 'stok' => 18,
                 'stok_minimum' => 5
             ],
@@ -183,7 +183,7 @@ class BarangSeeder extends Seeder
                 'nama_barang' => 'Teh Tarik Dingin',
                 'kategori_id' => $minuman->id,
                 'harga_beli' => 3000,
-                'harga_jual' => 12000,
+                'harga_jual' => 10000,
                 'stok' => 30,
                 'stok_minimum' => 5
             ],

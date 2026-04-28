@@ -12,6 +12,8 @@ return new class extends Migration
 public function up() {
     Schema::create('pengeluarans', function (Blueprint $table) {
         $table->id();
+        $table->date('tanggal'); // 🔥 Tambahkan ini
+        $table->string('kategori');
         $table->string('keterangan');
         $table->integer('jumlah');
         $table->timestamps();

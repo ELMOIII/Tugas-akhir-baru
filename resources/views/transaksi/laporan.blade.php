@@ -14,10 +14,12 @@
         <p class="metric-label">Total Pendapatan</p>
         <p class="metric-value">Rp {{ number_format($total) }}</p>
     </div>
+
     <div class="metric-card">
-        <p class="metric-label">Total Keuntungan</p>
+        <p class="metric-label">Total Keuntungan (Laba Bersih)</p>
         <p class="metric-value positive">Rp {{ number_format($totalKeuntungan) }}</p>
     </div>
+
     <div class="metric-card">
         <p class="metric-label">Jumlah Transaksi</p>
         <p class="metric-value">{{ $transaksis->count() }}</p>

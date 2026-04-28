@@ -12,8 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lombas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Otomatis jadi 'No'
+            $table->date('tanggal'); // Sesuai <th>Tanggal</th>
+            $table->string('sesi'); // Sesuai <th>Sesi</th> (pakai string biar bisa diisi "Sesi 1", "Pagi", dll)
+            
+            // 👇 Asumsi 'Peserta' adalah jumlah tiket/orang. 
+            // Kalau maksudmu 'Peserta' adalah NAMA orangnya, ubah jadi $table->string('nama_peserta');
+            $table->integer('jumlah_peserta'); 
+            
+            $table->integer('harga_tiket'); // Sesuai <th>Harga Tiket</th>
+            $table->integer('total'); // Sesuai <th>Total</th>
+            
+            $table->timestamps(); // Bawaan Laravel (created_at, updated_at)
         });
     }
 
