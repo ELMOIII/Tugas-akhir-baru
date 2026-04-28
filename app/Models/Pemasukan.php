@@ -11,6 +11,7 @@ class Pemasukan extends Model
     'nama_lomba',
     'jumlah_peserta',
     'harga_tiket',
+    'transaksi_id',
     'total'
 ];
 

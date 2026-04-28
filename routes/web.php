@@ -8,6 +8,7 @@ use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -17,9 +18,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::post('/payment/callback', [PaymentController::class, 'callback']);
+
 
 // 🔐 SEMUA FITUR MASUK AUTH
 Route::middleware(['auth'])->group(function () {
+    Route::post('/payment/get-token', [PaymentController::class, 'getSnapToken']);
 
     // =========================
     // 📦 PROFILE
