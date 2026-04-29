@@ -27,11 +27,6 @@
             <input id="tanggal" type="date" name="tanggal" value="{{ old('tanggal') }}" class="form-input">
         </div>
 
-        <div class="field">
-            <label for="kategori">Kategori</label>
-            <input id="kategori" type="text" name="kategori" value="{{ old('kategori') }}" class="form-input">
-        </div>
-
         <div class="field field-full">
             <label for="keterangan">Keterangan</label>
             <input id="keterangan" type="text" name="keterangan" value="{{ old('keterangan') }}" class="form-input">

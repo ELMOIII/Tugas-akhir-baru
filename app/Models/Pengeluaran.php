@@ -8,7 +8,6 @@ class Pengeluaran extends Model
 {
     protected $fillable = [
         'tanggal',
-        'kategori',
         'keterangan',
         'jumlah'
     ];

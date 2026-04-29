@@ -31,14 +31,12 @@ class PengeluaranController extends Controller
     {
         $request->validate([
             'tanggal' => 'required',
-            'kategori' => 'required',
             'keterangan' => 'required',
             'jumlah' => 'required|numeric|min:1'
         ]);
 
         Pengeluaran::create([
             'tanggal' => $request->tanggal,
-            'kategori' => $request->kategori,
             'keterangan' => $request->keterangan,
             'jumlah' => $request->jumlah,
             'user_id' => auth()->id()
@@ -63,7 +61,6 @@ class PengeluaranController extends Controller
     {
         $request->validate([
             'tanggal' => 'required',
-            'kategori' => 'required',
             'keterangan' => 'required',
             'jumlah' => 'required|numeric|min:1'
         ]);

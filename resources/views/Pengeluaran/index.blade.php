@@ -20,7 +20,6 @@
             <thead>
                 <tr>
                     <th>Tanggal</th>
-                    <th>Kategori</th>
                     <th>Keterangan</th>
                     <th>Jumlah</th>
                     <th>Aksi</th>
@@ -30,7 +29,6 @@
                 @forelse($pengeluarans as $p)
                     <tr>
                         <td>{{ $p->tanggal ?? '-' }}</td>
-                        <td>{{ $p->kategori ?? '-' }}</td>
                         <td><strong>{{ $p->keterangan }}</strong></td>
                         <td class="money">Rp {{ number_format($p->jumlah) }}</td>
                         <td>
@@ -48,7 +46,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" style="text-align: center;">Belum ada data pengeluaran.</td>
+                        <td colspan="4" style="text-align: center;">Belum ada data pengeluaran.</td>
                     </tr>
                 @endforelse
             </tbody>
